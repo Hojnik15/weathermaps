@@ -1,0 +1,32 @@
+h1{
+    font-size: 40px;
+    text-align: center;
+}
+
+.btn{
+    margin-left: 30%;
+    margin-right: 30%;
+    width: 100px;
+    margin-top: 30px;
+}
+
+input[type="text"]{
+    display: block;
+    margin : 0 auto;
+    width: 40%;
+}
+
+
+div{
+    border: black 2px solid;
+    width: 40%;
+    height: 500px;
+    margin-left: 30%;
+    margin-right: 30%;
+    margin-top: 50px;
+}
+
+.button{
+    float: right;
+    margin-bottom: 10px;
+}
