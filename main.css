@@ -17,16 +17,12 @@ input[type="text"]{
 }
 
 
-div{
-    border: black 2px solid;
-    width: 40%;
-    height: 500px;
-    margin-left: 30%;
-    margin-right: 30%;
-    margin-top: 50px;
-}
-
 .button{
     float: right;
     margin-bottom: 10px;
+}
+
+th{
+    border: black 1px solid;
+    padding: 10px;
 }

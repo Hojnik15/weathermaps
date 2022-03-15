@@ -43,8 +43,6 @@
         <input type = "text" class="form-control" name = "cilj" placeholder = "cilj" required>
         <button type = "submit" name = "submit" class="btn btn-primary" value = "submit">Start</button>
     </form>
-
-    <div class = "okvir" id = "brisi" >
     <br />
     <?php
 
@@ -57,21 +55,81 @@
             $cilj = $_POST['cilj'];
       
             if($sql->execute([$start]) && $sql2->execute([$cilj])){
+                foreach($sql as $row){
+                    $lat = $row['lat'];
+                    $lng = $row['lng'];
+                }
+                foreach($sql2 as $row2){
+                    $lat2 = $row2['lat'];
+                    $lng2 = $row2['lng'];
+                }
                 if($sql->rowcount()==1 && $sql2->rowcount()==1){
-                    echo "dela";
+
+                    $R = 6371;  // earth's mean radius, km
+                    $sql3 = "SELECT 
+                            city,country,lat,lng,
+                            (
+                            $R *
+                            acos(cos(radians($lat)) * 
+                            cos(radians(lat)) * 
+                            cos(radians(lng) - 
+                            radians($lng)) + 
+                            sin(radians($lat)) * 
+                            sin(radians(lat)))
+                            ) AS distance 
+                            FROM mesta 
+                            HAVING distance < 10 AND distance > 0 
+                            ORDER BY distance LIMIT 0, 20";
+
+                            $points = $pdo->prepare($sql3);
+                            $points->execute();
+                            
+                            ?>
+                            <table border ="1">
+                            <tr>
+                                <th>City</th>
+                                <th>Country</th>
+                                <th>Distance</th>
+                                <th>lat</th>
+                                <th>lng</th>
+                            </tr>
+                            <?php
+                            $latracun = $lat - $lat2;
+                            $lngracun = $lng - $lng2;
+                            echo $latracun, ' ', $lngracun;
+                            foreach ($points as $row){
+                                echo '
+                                        <tr>
+                                            <td>
+                                                '.$row['city'].',
+                                            </td>
+                                            <td>
+                                                '.$row['country'].',
+                                            </td>
+                                            <td>
+                                                '.$row['distance'].',
+                                            </td>
+                                            <td>
+                                                '.$row['lat'].',
+                                            </td>
+                                            <td>
+                                            '.$row['lng'].',
+                                        </td>
+                                        </tr>';
+                            }
+                            ?>
+                            </table>
+                            <?php
                 }
                 else{
                     echo "nestari";
                 }
             }
         } else{
-            echo "";
+            echo "okej";
         }
             
         ?>
-
-    </div>
-
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 </body>
