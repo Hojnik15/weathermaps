@@ -104,25 +104,7 @@
                                 $latmestovkrogu = $row['lat'];
                                 $lngmestovkrogu = $row['lng'];
 
-                            /*
-                                $apiKey = "874e8c6cda9adf0d143f3c1f30790828";
-                                $citylat = $latmestovkrogu;
-                                $citylon = $lngmestovkrogu;
-                                $googleApiUrl = "http://api.openweathermap.org/data/2.5/weather?lat=" . $citylat . "&lon=". $citylon ."&lang=en&units=metric&APPID=" . $apiKey;
-                        
-                                $ch = curl_init();
-                        
-                                curl_setopt($ch, CURLOPT_HEADER, 0);
-                                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                                curl_setopt($ch, CURLOPT_URL, $googleApiUrl);
-                                curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-                                curl_setopt($ch, CURLOPT_VERBOSE, 0);
-                                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-                                $response = curl_exec($ch);
-                        
-                                curl_close($ch);
-                                $data = json_decode($response);
-                                $currentTime = time(); */
+              
 
 
                                 $mestavpravosmerlat = $lat - $latmestovkrogu;
