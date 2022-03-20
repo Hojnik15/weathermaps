@@ -63,6 +63,7 @@
                     $lat2 = $row2['lat'];
                     $lng2 = $row2['lng'];
                 }
+
                 if($sql->rowcount()==1 && $sql2->rowcount()==1){
 
                     $R = 6371;  // earth's mean radius, km
@@ -78,7 +79,7 @@
                             sin(radians(lat)))
                             ) AS distance 
                             FROM mesta 
-                            HAVING distance < 10 AND distance > 0 
+                            HAVING distance < 1000 AND distance > 0 
                             ORDER BY distance LIMIT 0, 20";
 
                             $points = $pdo->prepare($sql3);
@@ -92,30 +93,153 @@
                                 <th>Distance</th>
                                 <th>lat</th>
                                 <th>lng</th>
+                                <th>Vreme</th>
+                                <th>Nekaj</th>
                             </tr>
                             <?php
                             $latracun = $lat - $lat2;
                             $lngracun = $lng - $lng2;
                             echo $latracun, ' ', $lngracun;
                             foreach ($points as $row){
-                                echo '
-                                        <tr>
-                                            <td>
-                                                '.$row['city'].',
-                                            </td>
-                                            <td>
-                                                '.$row['country'].',
-                                            </td>
-                                            <td>
-                                                '.$row['distance'].',
-                                            </td>
-                                            <td>
-                                                '.$row['lat'].',
-                                            </td>
-                                            <td>
-                                            '.$row['lng'].',
+                                $latmestovkrogu = $row['lat'];
+                                $lngmestovkrogu = $row['lng'];
+
+                            /*
+                                $apiKey = "874e8c6cda9adf0d143f3c1f30790828";
+                                $citylat = $latmestovkrogu;
+                                $citylon = $lngmestovkrogu;
+                                $googleApiUrl = "http://api.openweathermap.org/data/2.5/weather?lat=" . $citylat . "&lon=". $citylon ."&lang=en&units=metric&APPID=" . $apiKey;
+                        
+                                $ch = curl_init();
+                        
+                                curl_setopt($ch, CURLOPT_HEADER, 0);
+                                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                                curl_setopt($ch, CURLOPT_URL, $googleApiUrl);
+                                curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+                                curl_setopt($ch, CURLOPT_VERBOSE, 0);
+                                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                                $response = curl_exec($ch);
+                        
+                                curl_close($ch);
+                                $data = json_decode($response);
+                                $currentTime = time(); */
+
+
+                                $mestavpravosmerlat = $lat - $latmestovkrogu;
+                                $mestavpravosmerlng = $lng - $lngmestovkrogu;
+
+                                if($mestavpravosmerlng > 0 && $lngracun > 0 && $mestavpravosmerlat > 0 && $latracun > 0 ){
+                                    echo '
+                                    <tr>
+                                        <td>
+                                            '.$row['city'].',
                                         </td>
-                                        </tr>';
+                                        <td>
+                                            '.$row['country'].',
+                                        </td>
+                                        <td>
+                                            '.$row['distance'].',
+                                        </td>
+                                        <td>
+                                            '.$row['lat'].',
+                                        </td>
+                                        <td>
+                                        '.$row['lng'].',
+                                        </td>
+                                        <td>
+                                        ';/*echo ucwords($data->weather[0]->description); */echo 'vreme'; echo',
+                                        </td>
+                                        <td>
+                                        ';/* echo $data->main->humidity;*/ echo 'wind speed'; echo',
+                                        </td>
+                                    </tr>'; 
+                                }
+
+                                else if ( $mestavpravosmerlng < 0 && $lngracun < 0 && $mestavpravosmerlat > 0 && $latracun > 0 ){
+
+                                    echo '
+                                    <tr>
+                                        <td>
+                                            '.$row['city'].',
+                                        </td>
+                                        <td>
+                                            '.$row['country'].',
+                                        </td>
+                                        <td>
+                                            '.$row['distance'].',
+                                        </td>
+                                        <td>
+                                            '.$row['lat'].',
+                                        </td>
+                                        <td>
+                                        '.$row['lng'].',
+                                        </td>
+                                        <td>
+                                        ';/*echo ucwords($data->weather[0]->description); */ echo "vreme";echo',
+                                        </td>
+                                        <td>
+                                        '; /*echo $data->main->humidity;*/ echo 'wind speed'; echo',
+                                        </td>
+                                    </tr>'; 
+                                }
+                                
+                                
+                                else if ( $mestavpravosmerlng > 0 && $lngracun > 0 && $mestavpravosmerlat < 0 && $latracun < 0 ){
+
+                                    echo '
+                                    <tr>
+                                        <td>
+                                            '.$row['city'].',
+                                        </td>
+                                        <td>
+                                            '.$row['country'].',
+                                        </td>
+                                        <td>
+                                            '.$row['distance'].',
+                                        </td>
+                                        <td>
+                                            '.$row['lat'].',
+                                        </td>
+                                        <td>
+                                        '.$row['lng'].',
+                                        </td>
+                                        <td>
+                                        ';/*echo ucwords($data->weather[0]->description);*/ echo "vreme"; echo',
+                                        </td>
+                                        <td>
+                                        '.$mestavpravosmerlng.',
+                                        </td>
+                                    </tr>'; 
+                                }
+
+                                
+                                else if ( $mestavpravosmerlng < 0 && $lngracun < 0 && $mestavpravosmerlat < 0 && $latracun < 0 ){
+
+                                    echo '
+                                    <tr>
+                                        <td>
+                                            '.$row['city'].',
+                                        </td>
+                                        <td>
+                                            '.$row['country'].',
+                                        </td>
+                                        <td>
+                                            '.$row['distance'].',
+                                        </td>
+                                        <td>
+                                            '.$row['lat'].',
+                                        </td>
+                                        <td>
+                                        '.$row['lng'].',
+                                        </td>
+                                        <td>
+                                        ';/*echo ucwords($data->weather[0]->description);*/ echo "vreme"; echo',
+                                        </td>
+                                        <td>
+                                        '.$mestavpravosmerlng.',
+                                        </td>
+                                    </tr>'; 
+                                }
                             }
                             ?>
                             </table>
